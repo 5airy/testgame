@@ -11,7 +11,7 @@ class Grid
 	GUI * pGUI;   // a pointer to the the interface
 	Cell*	GameCells[NumRowCells][NumColumnCells];	// Array of Pointers to Cell
 	Player* player;
-	ecelltype GameCellsnum[NumRowCells][NumColumnCells] = { EMPTYC };
+	ecelltype GameCellsnum[NumRowCells][NumColumnCells];
 public:
 	static int iEnemy, iDate, iObstacle, iHole, iGoal, iPlayer, iVirus, iLife, iEmpty;
 	int x, y; //For locations
@@ -31,7 +31,7 @@ public:
 	// Note: It returns bool indicating if a move occured or not
 
 	bool IsValidCell(int r, int c) const;
-	void CheckAction(ActionType ActType, int Gamecellsnum);
+	void CheckAction(ActionType ActType, ecelltype Gamecellsnum);
 
 	void DrawAllCells() const; // Draws the Grid and All its GameObjects
 

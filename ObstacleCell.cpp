@@ -9,10 +9,8 @@ ObstacleCell::ObstacleCell(int r, int c) :Cell(r, c){
 }
 bool ObstacleCell::ActOn(Player* p){
 	// to be edited..
-	return true;
+	return false; //this will refuse any move on this cell
 }
 void ObstacleCell::Save(ofstream &f){
 	f << "Obstacle Cell" << '\t' << getRow() + 1 << '\t' << getCol() + 1 << endl;
-
-
 }

@@ -20,11 +20,12 @@ Grid::Grid()
 		for (int j = 0; j < NumColumnCells; j++)		{
 
 			GameCells[i][j] = new EmptyCell(i, j);	//start with all cells as empty cells
+			GameCellsnum[i][j] = EMPTYC;
 		}
 	}
 	pGUI = new GUI;
 	DrawAllCells();
-
+	//ecelltype GameCellsnum[NumRowCells][NumColumnCells] = { EMPTYC };
 }
 
 
@@ -166,11 +167,12 @@ void Grid::ExecuteAction(ActionType ActType)
 
 }
 
-void Grid::CheckAction(ActionType ActType, int GameCellsnum)
+void Grid::CheckAction(ActionType ActType, ecelltype GameCellsnum)
 {
 	switch (GameCellsnum)
 	{
 	case OBSTACLEC:
+		//IGNORE THE MOVE;
 		break;
 	case DATEEC:
 		player->IncreaseDate();
@@ -385,7 +387,6 @@ void Grid::ExecuteAction(ActionType ActType, Cell* myCell)
 	//First initialize them as current row and col
 	int playerOldRow = myCell->getRow();
 	int playerOldCol = myCell->getCol();
-
 	int TargetRow = playerOldRow;
 	int TargetCol = playerOldCol;
 	// According to Action Type, create the corresponding action object	
@@ -423,20 +424,20 @@ void Grid::ExecuteAction(ActionType ActType, Cell* myCell)
 
 		///TODO: Add a case for EACH Action type
 	case MOVE_UP:
-		TargetRow--;
-		CheckAction(ActType, GameCellsnum[TargetRow][TargetCol]);
+		//TargetRow--;
+		CheckAction(ActType, GameCellsnum[playerOldRow-1][playerOldCol]);
 		break;
 	case MOVE_DOWN:
-		TargetCol++;
-		CheckAction(ActType, GameCellsnum[TargetRow][TargetCol]);
+		//TargetRow++;
+		CheckAction(ActType, GameCellsnum[playerOldRow+1][playerOldCol]);
 		break;
 	case MOVE_RIGHT:
-		TargetCol++;
-		CheckAction(ActType, GameCellsnum[TargetRow][TargetCol]);
+		//TargetCol++;
+		CheckAction(ActType, GameCellsnum[playerOldRow][playerOldCol+1]);
 		break;
 	case MOVE_LEFT:
-		TargetCol--;
-		CheckAction(ActType, GameCellsnum[TargetRow][TargetCol]);
+	//	TargetCol--;
+		CheckAction(ActType, GameCellsnum[playerOldRow][playerOldCol-1]);
 		break;
 
 	case STATUS:	// a click on the status bar ==> no action
