@@ -11,6 +11,9 @@ bool HoleCell::ActOn(Player* p){
 	// to be edited..
 	return true;
 }
+int HoleCell::Act(Player* p){
+	return 3;
+}
 void HoleCell::Save(ofstream &f){
 	f << "Hole Cell" << '\t' << getRow() + 1 << '\t' << getCol() + 1 << endl;
 
