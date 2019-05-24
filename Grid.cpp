@@ -30,6 +30,164 @@ Grid::Grid()
 
 
 
+void Grid::MoveVirus(Cell* pCurrentCell, ActionType dir){
+	
+		int playerOldRow = pCurrentCell->getRow();
+		int playerOldCol = pCurrentCell->getCol();
+
+		int TargetRow = playerOldRow;
+		int TargetCol = playerOldCol;
+
+		int VirusRow = playerOldRow;
+		int VirusCol = playerOldCol;
+			switch (dir)
+				{
+				case MOVE_UP:
+					TargetRow++;
+					VirusRow--;
+					break;
+				case MOVE_DOWN:
+					TargetRow--;
+					VirusRow++;
+					break;
+				case MOVE_LEFT:
+					TargetCol++;
+					VirusCol--;
+					break;
+				case MOVE_RIGHT:
+					TargetCol--;
+					VirusCol++;
+					break;
+				}
+				Cell *pTargetCell = GameCells[TargetRow][TargetCol];
+				if (pTargetCell->Act(player) == 1){
+					pGUI->setInterfaceMode(MODE_MENU);
+					pGUI->PrintMessage("GOAL!!!");
+					//Sleep(1000);
+				}
+
+				//The target cell is not an obstacle and has acted on the player
+				//The player position should be updated to the target cell
+
+				//Player should be moved to the target cell
+				//1-delete the target cell and make it point to the PlayerCell
+
+				setCell(TargetRow, TargetCol, pCurrentCell);
+
+				//2- update player position
+				pCurrentCell->SetRow(TargetRow);
+				pCurrentCell->SetCol(TargetCol);
+
+				//3- Convert the old player position to an Empty cell
+				GameCells[playerOldRow][playerOldCol] = new EmptyCell(playerOldRow, playerOldCol);
+				GameCells[VirusRow][VirusCol] = new EmptyCell(VirusRow, VirusCol);
+
+				//4- Redraw both cells
+				pGUI->DrawCell(GameCells[VirusRow][VirusCol]);
+				pGUI->DrawCell(GameCells[TargetRow][TargetCol]);
+				pGUI->DrawCell(GameCells[playerOldRow][playerOldCol]);
+
+			
+		
+}
+
+void Grid::MoveHole(Cell* pCurrentCell, ActionType dir){
+
+	int playerOldRow = pCurrentCell->getRow();
+	int playerOldCol = pCurrentCell->getCol();
+
+	int TargetRow = playerOldRow;
+	int TargetCol = playerOldCol;
+
+	switch (dir)
+	{
+	case MOVE_UP:
+		TargetRow-=5;
+		break;
+	case MOVE_DOWN:
+		TargetRow+=5;
+		break;
+	case MOVE_LEFT:
+		TargetCol-=5;
+		break;
+	case MOVE_RIGHT:
+		TargetCol+=5;
+		break;
+	}
+	Cell *pTargetCell = GameCells[TargetRow][TargetCol];
+	if (pTargetCell->Act(player) == 1){
+		pGUI->setInterfaceMode(MODE_MENU);
+		pGUI->PrintMessage("GOAL!!!");
+		//Sleep(1000);
+	}
+
+	//The target cell is not an obstacle and has acted on the player
+	//The player position should be updated to the target cell
+
+	//Player should be moved to the target cell
+	//1-delete the target cell and make it point to the PlayerCell
+
+	setCell(TargetRow, TargetCol, pCurrentCell);
+
+	//2- update player position
+	pCurrentCell->SetRow(TargetRow);
+	pCurrentCell->SetCol(TargetCol);
+
+	//3- Convert the old player position to an Empty cell
+	GameCells[playerOldRow][playerOldCol] = new EmptyCell(playerOldRow, playerOldCol);
+
+	//4- Redraw both cells
+	pGUI->DrawCell(GameCells[TargetRow][TargetCol]);
+	pGUI->DrawCell(GameCells[playerOldRow][playerOldCol]);
+
+
+
+}
+// moving the enemy (to be finished)
+void Grid::MoveEnemy(Cell * pCurrentCell){
+	int TargetRow = pCurrentCell->getRow();
+	int TargetCol = pCurrentCell->getCol();
+
+	
+	while (1){
+		for (int i = 0; i < 5; i++){
+		TargetRow--;
+		DrawEnemy(TargetRow, TargetCol, pCurrentCell);
+		Sleep(500);
+		}
+		for (int i = 0; i < 5; i++){
+			TargetCol++;
+			DrawEnemy(TargetRow, TargetCol, pCurrentCell);
+			Sleep(500);
+		}
+		for (int i = 0; i < 5; i++){
+			TargetCol--;
+			DrawEnemy(TargetRow, TargetCol, pCurrentCell);
+			Sleep(500);
+		}
+		for (int i = 0; i < 5; i++){
+			TargetRow++;
+			DrawEnemy(TargetRow, TargetCol, pCurrentCell);
+			Sleep(500);
+		}
+	}
+}
+void Grid::DrawEnemy(int r, int c,Cell * Enemy){
+
+	int oldRow = Enemy->getRow();
+	int oldCol = Enemy->getCol();
+
+	int TargetRow = oldRow;
+	int TargetCol = oldCol;
+	Enemy->SetRow(TargetRow);
+	Enemy->SetCol(TargetCol);
+
+	GameCells[oldRow][oldCol] = new EmptyCell(oldRow, oldCol);
+
+
+	pGUI->DrawCell(GameCells[TargetRow][TargetCol]);
+	pGUI->DrawCell(GameCells[oldRow][oldCol]);
+}
 /////////////////////////////////////////////////////////////////////////////////////////////
 // Moves the entered position in the passed direction if possible
 // updates currentCell if move takes place
@@ -70,26 +228,47 @@ bool Grid::MoveIfPossible(Cell* pCurrentCell, ActionType dir)
 
 	if (!pTargetCell->ActOn(player))	//The target cell is an obstacle ==> no action should be taken
 		return false;
+	//1 for GoalCell
+	//2 for VirusCell
+	//3 for HoleCell
+	//4 for EnemyCell
+	if (pTargetCell->Act(player) == 1){
+		pGUI->setInterfaceMode(MODE_MENU);
+		pGUI->PrintMessage("GOAL!!!");
+		//Sleep(1000);
+	}
+	
+	
+	if (pTargetCell->Act(player) == 2){
+		MoveVirus(pCurrentCell, dir);
+		return true;
+	}
+	else if (pTargetCell->Act(player) == 3){
+		MoveHole(pCurrentCell, dir);
+		return true;
+	}
+	else{
+		//The target cell is not an obstacle and has acted on the player
+		//The player position should be updated to the target cell
 
-	//The target cell is not an obstacle and has acted on the player
-	//The player position should be updated to the target cell
+		//Player should be moved to the target cell
+		//1-delete the target cell and make it point to the PlayerCell
 
-	//Player should be moved to the target cell
-	//1-delete the target cell and make it point to the PlayerCell
-	setCell(TargetRow, TargetCol, pCurrentCell);
+		setCell(TargetRow, TargetCol, pCurrentCell);
 
-	//2- update player position
-	pCurrentCell->SetRow(TargetRow);
-	pCurrentCell->SetCol(TargetCol);
+		//2- update player position
+		pCurrentCell->SetRow(TargetRow);
+		pCurrentCell->SetCol(TargetCol);
 
-	//3- Convert the old player position to an Empty cell
-	GameCells[playerOldRow][playerOldCol] = new EmptyCell(playerOldRow, playerOldCol);
+		//3- Convert the old player position to an Empty cell
+		GameCells[playerOldRow][playerOldCol] = new EmptyCell(playerOldRow, playerOldCol);
 
-	//4- Redraw both cells
-	pGUI->DrawCell(GameCells[TargetRow][TargetCol]);
-	pGUI->DrawCell(GameCells[playerOldRow][playerOldCol]);
+		//4- Redraw both cells
+		pGUI->DrawCell(GameCells[TargetRow][TargetCol]);
+		pGUI->DrawCell(GameCells[playerOldRow][playerOldCol]);
 
-	return true;
+		return true;
+	}
 }
 
 void Grid::DrawAllCells() const
