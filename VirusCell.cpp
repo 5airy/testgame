@@ -11,6 +11,9 @@ bool VirusCell::ActOn(Player* p){
 	// to be edited..
 	return true;
 }
+int VirusCell::Act(Player*p){
+	return 2;
+}
 void VirusCell::Save(ofstream &f){
 	f << "Virus Cell" << '\t' << getRow() + 1 << '\t' << getCol() + 1 << endl;
 
