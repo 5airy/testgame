@@ -41,7 +41,7 @@ public:
 
 	virtual bool ActOn(Player* p);	//Takes appropriate action on the player according to cell type
 	//This function should be overriden by each derived cell class
-
+	virtual int Act(Player* p);
 	string getImage() const;	//return image of the cell
 
 	bool operator == (const Cell & other) const; // Operator Overloading : Check if the passed cell equals the current cell
