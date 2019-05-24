@@ -76,7 +76,9 @@ void Cell::Save(ofstream &f){
 
 	f << "TRY" << endl;
 }
-
+int Cell::Act(Player*p){
+	return 0;
+}
 
 Cell::~Cell()
 {}
