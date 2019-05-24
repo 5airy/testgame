@@ -10,7 +10,9 @@ bool EnemyCell::ActOn(Player* p){
 	// to be edited..
 	return true;
 }
-
+int EnemyCell::Act(Player*p){
+	return 4;
+}
 void EnemyCell::Save(ofstream &f){
 	f << "Enemy Cell" << '\t' << getRow() + 1 << '\t' << getCol() + 1 << endl;
 
