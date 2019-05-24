@@ -12,6 +12,10 @@ bool GoalCell::ActOn(Player* p){
 
 	return true;
 }
+int GoalCell::Act(Player*p){
+	return 1;
+}	
+
 void GoalCell::Save(ofstream &f){
 	f << "Goal Cell" << '\t' << getRow() + 1 << '\t' << getCol() + 1 << endl;
 
