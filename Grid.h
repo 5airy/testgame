@@ -34,7 +34,12 @@ public:
 	void CheckAction(ActionType ActType, ecelltype Gamecellsnum);
 
 	void DrawAllCells() const; // Draws the Grid and All its GameObjects
-
+////////////////////////////////////////////////////////////////////////////////////////////
+	void MoveHole(Cell * pCurrentCell, ActionType dir);//control the movement when player touch a hole
+	void MoveVirus(Cell * pCurrentCell, ActionType dir);//control the movement when player touch a virus
+	void MoveEnemy(Cell * pCurrentCell);//control the movement of the enemy (not finished)
+	void DrawEnemy(int r, int c,Cell*Enemy);//draws the enemy cell
+////////////////////////////////////////////////////////////////////////////////////////////
 
 	GUI * getGUI() const;	// Gets a Pointer to the GUI
 
