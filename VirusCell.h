@@ -10,5 +10,6 @@ public:
 	VirusCell(int r, int c); //default constructor
 	bool ActOn(Player* p);
 	void Save(ofstream &f);
+	int Act(Player*p);
 
 };
