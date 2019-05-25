@@ -4,6 +4,8 @@
 #include "GUI.h"
 #include "DEFS.h"
 #include "Cell.h"
+#include "EnemyCell.h"
+#include "EmptyCell.h"
 class Player;	//forward class declaration
 
 class Grid
@@ -13,7 +15,7 @@ class Grid
 	Player* player;
 	ecelltype GameCellsnum[NumRowCells][NumColumnCells];
 public:
-	static int iEnemy, iDate, iObstacle, iHole, iGoal, iPlayer, iVirus, iLife, iEmpty;
+	//static int iEnemy, iDate, iObstacle, iHole, iGoal, iPlayer, iVirus, iLife, iEmpty;
 	int x, y; //For locations
 	int desiredRow, desiredColumn;
 	Grid();
@@ -48,6 +50,8 @@ public:
 	void SaveAll(); // 
 	//void Load(); // For load Operation OF COURSE
 	void deleteTheCells(); // We'll use it in LOADING to delete all the available cells before loading
+	void moveEnemies(EnemyCell** enemies, int& iEn);
+	//ActionType randomDirection();
 private:
 
 };

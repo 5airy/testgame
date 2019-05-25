@@ -232,7 +232,7 @@ bool Grid::MoveIfPossible(Cell* pCurrentCell, ActionType dir)
 	//2 for VirusCell
 	//3 for HoleCell
 	//4 for EnemyCell
-	if (pTargetCell->Act(player) == 1){
+	if (pTargetCell->Act(player) == 1 && pCurrentCell->Act(player) != 4){
 		pGUI->setInterfaceMode(MODE_MENU);
 		pGUI->PrintMessage("GOAL!!!");
 		//Sleep(1000);
@@ -246,8 +246,11 @@ bool Grid::MoveIfPossible(Cell* pCurrentCell, ActionType dir)
 	else if (pTargetCell->Act(player) == 3){
 		MoveHole(pCurrentCell, dir);
 		return true;
+	}else if (pTargetCell->Act(player) == 1 && pCurrentCell->Act(player) == 4){
+		// DO NOTHING
+		return true;
 	}
-	else{
+	else {
 		//The target cell is not an obstacle and has acted on the player
 		//The player position should be updated to the target cell
 
@@ -540,6 +543,8 @@ void Grid::RunApp()
 				}
 			}
 		}
+		if (pGUI->getInterfaceMode()==MODE_GAME) 
+			moveEnemies(enemy,iEnemy);
 		pGUI->PrintMessage(" ");
 		Sleep(100);
 	}
@@ -656,3 +661,24 @@ void Grid::deleteTheCells(){
 		}
 	}
 }
+void Grid::moveEnemies(EnemyCell** enemies, int& iEn){
+	int x=0;
+
+	for (int i = 0; i <= iEn; i++) {
+		x = rand() % 4;
+		ActionType actnow;
+		switch (x)
+		{
+		case 0: actnow = MOVE_UP;
+			break;
+		case 1: actnow = MOVE_DOWN;
+			break;
+		case 2: actnow = MOVE_RIGHT;
+			break;
+		case 3: actnow = MOVE_LEFT;
+			break;
+		}
+		MoveIfPossible(enemies[i], actnow);
+	}
+}
+
